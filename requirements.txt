@@ -1,0 +1,2 @@
+zenml[server]==0.58.0
+scikit-learn==1.5.0
