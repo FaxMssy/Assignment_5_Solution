@@ -13,4 +13,8 @@ def evaluate_model(model: RandomForestRegressor, X_test:pd.DataFrame,y_test:pd.S
     y_pred = model.predict(X_test)
     mse = mean_squared_error(y_test,y_pred)
     mae = mean_absolute_error(y_test,y_pred)
+
+    # Print scalar variables directly
+    print(f"Mean Squared Error (MSE): {mse}")
+    print(f"Mean Absolute Error (MAE): {mae}")
     return mse,mae

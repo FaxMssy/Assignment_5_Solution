@@ -17,4 +17,5 @@ def training_pipeline():
     y_test = client.get_artifact_version("y_test")
     model = train_model(X_train, y_train)
     mae = evaluate_model(model, X_test, y_test)
+
     return mae

@@ -10,4 +10,6 @@ def inference_prediction(batch: pd.DataFrame, model: RandomForestRegressor, drif
     predictions = model.predict(batch)
     batch["predictions"] = predictions
     batch["drift"] = drift
+
+    batch.to_csv('data/result.csv', index=False) 
     return batch

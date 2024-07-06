@@ -12,5 +12,16 @@ def inference_preprocessing(data: pd.DataFrame, pipeline: Pipeline) -> Annotated
     transformed_data = pipeline.transform(data)
     cat_features_after_encoding = pipeline.named_steps['preprocessor'].transformers_[1][1].named_steps['encoder'].get_feature_names_out(data.select_dtypes(include=['object']).columns)
     all_features = list(data.select_dtypes(exclude=['object']).columns) + list(cat_features_after_encoding)
+
+    #all_features = [feature for feature in all_features if feature != 'weather_condition_None']
+
+
+    print("#########################################")
+    print("All features inference: " + ", ".join(all_features))
+    print("Transformed Data: ")
+    print(transformed_data)
+    transformed_data2 = pd.DataFrame(transformed_data)
+    transformed_data2.to_csv('data/transformed_data.csv', index=False) 
+    
     data_df = pd.DataFrame(transformed_data, columns=all_features)
     return data_df
