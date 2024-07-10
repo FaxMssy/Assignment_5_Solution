@@ -11,5 +11,9 @@ def inference_prediction(batch: pd.DataFrame, model: RandomForestRegressor, drif
     batch["predictions"] = predictions
     batch["drift"] = drift
 
-    batch.to_csv('data/result.csv', index=False) 
+
+    inference_data_with_timestamp = pd.read_csv("data/inference_data_with_timestamp.csv")
+    inference_data_with_timestamp["predictions"] = predictions
+    inference_data_with_timestamp.to_csv('data/result_with_timestamp.csv')
+    #batch.to_csv('data/result.csv', index=False) 
     return batch

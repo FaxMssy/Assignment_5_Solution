@@ -21,7 +21,7 @@ def inference_preprocessing(data: pd.DataFrame, pipeline: Pipeline) -> Annotated
     print("Transformed Data: ")
     print(transformed_data)
     transformed_data2 = pd.DataFrame(transformed_data)
-    transformed_data2.to_csv('data/transformed_data.csv', index=False) 
+    #transformed_data2.to_csv('data/transformed_data.csv', index=False) 
     
     data_df = pd.DataFrame(transformed_data, columns=all_features)
     return data_df

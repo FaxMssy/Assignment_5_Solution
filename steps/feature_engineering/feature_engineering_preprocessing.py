@@ -22,7 +22,7 @@ def feature_engineering_preprocessing(train: pd.DataFrame, test: pd.DataFrame, p
     X_train_df = pd.DataFrame(X_train_transformed, columns=all_features)
     X_test_df = pd.DataFrame(X_test_transformed, columns=all_features)
    
-    X_train_df.to_csv('data/X_train_df.csv', index=False) 
-    X_test_df.to_csv('data/X_test_df.csv', index=False) 
+    #X_train_df.to_csv('data/X_train_df.csv', index=False) 
+    #X_test_df.to_csv('data/X_test_df.csv', index=False) 
 
     return X_train_df, X_test_df, pipeline
