@@ -1,5 +1,4 @@
 from .feature_engineering.data_loader import data_loader
-from .feature_engineering.calculate_age import calculate_age
 from .feature_engineering.create_preprocessing_pipeline import create_preprocessing_pipeline
 from .feature_engineering.feature_engineering_preprocessing import feature_engineering_preprocessing
 from .training.train_model import train_model

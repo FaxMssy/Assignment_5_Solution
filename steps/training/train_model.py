@@ -7,8 +7,17 @@ from sklearn.model_selection import GridSearchCV
 from typing_extensions import Annotated
 import pandas as pd
 
+#Defining the config file name
 CONFIG_FILE = 'config.json'
 
+
+"""
+A config file is loaded (or created if it doesnt exist yet)
+The config file is needed for the model evaluation and hyperparameter tuning.
+It safes the best working model out of multiple different variants and has an 
+option to decide if all variants get trained or only the one that worked best.
+
+"""
 def load_config():
     try:
         with open(CONFIG_FILE, 'r') as file:
@@ -24,12 +33,17 @@ def load_config():
 def save_config(config):
     with open(CONFIG_FILE, 'w') as file:
         json.dump(config, file)
-
+"""
+train_model loads the config to decide which model to use or if it uses all models and tests which is best. 
+IF "test_all_models": True then it only trains with this one, otherwise it trains all.
+"""
 @step
 def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> Annotated[RandomForestRegressor, "model"]:
+
     """
     Trains a model using the given training data with hyperparameter tuning.
     """
+
     config = load_config()
 
     # Define the models and their hyperparameters
@@ -38,6 +52,10 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> Annotated[RandomFo
         'LinearRegression': LinearRegression(),
         'SVR': SVR()
     }
+
+    """
+    Different model variations to identify the best working model and the best hyperparameters
+    """
 
     param_grids = {
         'RandomForest': {
@@ -55,19 +73,22 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> Annotated[RandomFo
         }
     }
 
+    """
+    Training all or just the best model based on the config file
+    """
+
     if config["test_all_models"]:
         best_model = None
         best_score = -float('inf')
         best_params = None
         best_model_name = None
-        i = 1
+
         
         for model_name in models:
             model = models[model_name]
             param_grid = param_grids[model_name]
 
-            print("Durchlauf: " + str(i) + " Modelname: " + model_name)
-            i += 1
+
 
             # Use GridSearchCV for hyperparameter tuning
             search = GridSearchCV(model, param_grid, cv=5, scoring='neg_mean_absolute_error', n_jobs=-1)
@@ -87,11 +108,10 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> Annotated[RandomFo
         config["best_model_name"] = best_model_name
         config["best_params"] = best_params
         config["test_all_models"] = False
+
+        #Save the config with the best model and best hyperparamets according to the trainings from before
         save_config(config)
 
-        print(f"Best model: {best_model_name}")
-        print(f"Best parameters: {best_params}")
-        print(f"Best score: {best_score}")
 
     else:
         best_model_name = config["best_model_name"]
@@ -99,7 +119,6 @@ def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> Annotated[RandomFo
         best_model = models[best_model_name].set_params(**best_params)
         best_model.fit(X_train, y_train)
 
-        print(f"Using best model from previous run: {best_model_name}")
-        print(f"With parameters: {best_params}")
 
+    #The best model is returned for training
     return best_model

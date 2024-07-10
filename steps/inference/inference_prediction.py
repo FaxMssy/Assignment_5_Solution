@@ -13,7 +13,11 @@ def inference_prediction(batch: pd.DataFrame, model: RandomForestRegressor, drif
 
 
     inference_data_with_timestamp = pd.read_csv("data/inference_data_with_timestamp.csv")
+
+    #Adding the predictions to the inference dataset
     inference_data_with_timestamp["predictions"] = predictions
+
+    #Save the csv with the püredicted values
     inference_data_with_timestamp.to_csv('data/result_with_timestamp.csv')
-    #batch.to_csv('data/result.csv', index=False) 
+    
     return batch
